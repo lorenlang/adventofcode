@@ -12,17 +12,32 @@ $data = new FileReader(currentDir('test.txt'));
 $signals = [];
 
 foreach ($data->rows() as $row) {
-
-    $signals[] = makeCircuit($row);
+    list($data, $wire) = explode('->');
+    $signals[trim($wire)] = makeCircuit(trim($data));
 
 }
 
-foreach ($signals as $wire => $signal) {
-    output ("$wire:  $signal");
-}
+print_r($signals);
+
+// foreach ($signals as $wire => $signal) {
+//     output ("$wire:  $signal");
+// }
 
 
 function makeCircuit($data)
 {
-    //
+    $ops = ['AND', 'OR', 'NOT', 'LSHIFT', 'RSHIFT',];
+    $retArr = ['op' => NULL, 'val1' => NULL, 'val2' => NULL,];
+    $parts = explode(' ', $data);
+    foreach ($parts as $part) {
+        if (in_array($part, $ops)) {
+            $retArr['op'] = $part;
+        } elseif (is_numeric($part)) {
+            if (isset($retArr['val1'])) {
+                $retArr['val2'] = $part;
+            } else {
+                $retArr['val1'] = $part;
+            }
+        }
+    }
 }
