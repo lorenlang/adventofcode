@@ -17,9 +17,9 @@ class FileReader
     public function rows($parseCSV = false)
     {
         while ( ! feof($this->file)) {
-            $row = $parseCSV ? fgetcsv($this->file) : fgets($this->file);
+            $row = trim($parseCSV ? fgetcsv($this->file) : fgets($this->file));
             if ( ! empty($row)) {
-                yield trim($row);
+                yield $row;
             }
         }
 
