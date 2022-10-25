@@ -1,12 +1,10 @@
 <?php
 
 use Utility\FileReader;
-use Utility\PermutationsGenerator;
 
 require_once '../../autoload.php';
 require_once '../../functions.php';
 require_once '../../utility/FileReader.php';
-require_once '../../utility/PermutationsGenerator.php';
 
 // $data = new FileReader(currentDir('test.txt'));
 $data = new FileReader(currentDir('data.txt'));
