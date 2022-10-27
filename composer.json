@@ -1,0 +1,14 @@
+{
+  "name": "vendor_name/adventofcode",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "mgrloren",
+      "email": "email@example.com"
+    }
+  ],
+  "require": {
+  }
+}
