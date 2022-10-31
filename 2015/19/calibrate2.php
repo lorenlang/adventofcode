@@ -7,14 +7,14 @@ require_once '../../vendor/autoload.php';
 require_once '../../functions.php';
 require_once '../../utility/FileReader.php';
 
-$data = new FileReader(currentDir('test.txt'));
-// $data = new FileReader(currentDir('data.txt'));
+// $data = new FileReader(currentDir('test.txt'));
+$data = new FileReader(currentDir('data.txt'));
 
 
 $replacements = [];
 foreach ($data->rows() as $num => $row) {
     if (FALSE === strpos($row, '=>')) {
-        // $calibration = explode(' ', trim(preg_replace('/([A-Z][a-z]?+)/', '\1 ', $row)));
+        // $molecule = explode(' ', trim(preg_replace('/([A-Z][a-z]?+)/', '\1 ', $row)));
         $molecule = $row;
     } else {
         [$to, $fr] = explode(' => ', $row);
@@ -28,24 +28,27 @@ foreach ($data->rows() as $num => $row) {
 // });
 
 
-
 $steps = 0;
 while ($molecule != 'e') {
+    output("Molecule is: $molecule");
 
     $keys = array_keys($replacements);
     uksort($keys, function ($a, $b) {
         return strlen($b) - strlen($a);
     });
 
-    $key = array_pop($keys);
-    output("Key is:  $key");
-    output("Repl is: ". $replacements[$key]);
-    while (FALSE !== strpos($molecule, $key)) {
-        $molecule = substr_replace($molecule, $replacements[$key], strpos($molecule, $key), strlen($key));
-        output($molecule);
-        sleep(2);
-
+    // $key = array_pop($keys);
+    while ($key = array_pop($keys)) {
+        output("Key is:  $key");
+        output("Repl is: " . $replacements[$key]);
+        while (FALSE !== strpos($molecule, $key)) {
+            $molecule = substr_replace($molecule, $replacements[$key], strpos($molecule, $key), strlen($key));
+            output("Molecule is: $molecule");
+            sleep(1);
+        }
     }
+
+    sleep(1);
 }
 
 
