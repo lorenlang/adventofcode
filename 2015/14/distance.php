@@ -21,6 +21,7 @@ foreach ($data->rows() as $row) {
         'speed' => (int)(trim($speed)),
         'time'  => (int)(trim($time)),
         'rest'  => (int)(trim($rest)),
+        'total' => (int)(trim($time)) + (int)(trim($rest)),
     ];
 }
 
@@ -46,3 +47,8 @@ foreach ($reindeers as $name => $reindeer) {
 }
 
 output("Best: $best");
+
+
+output (max(array_map(function ($deer) use ($numSeconds) {
+    return $deer['speed'] * (floor($numSeconds / $deer['total']) * $deer['time'] + min($numSeconds % $deer['total'], $deer['time']));
+}, $reindeers)));
