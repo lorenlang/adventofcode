@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f52c57609561c9d3246d8d8426436dc4",
+    "content-hash": "677cfaa9767fc53a5d3965c716dd4721",
     "packages": [
         {
             "name": "drupol/phpermutations",
@@ -68,6 +68,55 @@
                 }
             ],
             "time": "2020-05-11T07:42:22+00:00"
+        },
+        {
+            "name": "mistralys/subsetsum",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Mistralys/subsetsum.git",
+                "reference": "ea41a29d8b0e403222b7fcf18a8f828a10016bbe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Mistralys/subsetsum/zipball/ea41a29d8b0e403222b7fcf18a8f828a10016bbe",
+                "reference": "ea41a29d8b0e403222b7fcf18a8f828a10016bbe",
+                "shasum": ""
+            },
+            "require": {
+                "ext-bcmath": "*",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpstan/phpstan": ">=0.12",
+                "phpunit/phpunit": ">=8.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Mistralys\\SubsetSum\\": "src/"
+                },
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian Mordziol",
+                    "email": "s.mordziol@mistralys.eu",
+                    "role": "Lead"
+                }
+            ],
+            "description": "PHP SubsetSum implementation to search for number combinations.",
+            "support": {
+                "issues": "https://github.com/Mistralys/subsetsum/issues",
+                "source": "https://github.com/Mistralys/subsetsum/tree/1.0.2"
+            },
+            "time": "2021-10-31T09:29:24+00:00"
         }
     ],
     "packages-dev": [],
