@@ -87,3 +87,10 @@ function stripNonAlphabetic($str, $repl = ''): string
 {
     return stripRegex($str, '/[^A-Za-z]/', $repl);
 }
+
+// ------------------------------------------------------------------------
+
+function isEven(int $int):bool
+{
+    return $int % 2 === 0;
+}
