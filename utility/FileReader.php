@@ -14,11 +14,12 @@ class FileReader
     }
 
 
-    public function rows($parseCSV = false)
+    public function rows($allowBlank = false, $parseCSV = false)
     {
         while ( ! feof($this->file)) {
             $row = trim($parseCSV ? fgetcsv($this->file) : fgets($this->file));
-            if ( ! empty($row)) {
+
+            if ( ! empty($row) || $allowBlank) {
                 yield $row;
             }
         }
