@@ -67,3 +67,30 @@ function url_check($url)
     return is_array($headers) ? preg_match('/^HTTP\\/\\d+\\.\\d+\\s+2\\d\\d\\s+.*$/', $headers[0]) : FALSE;
 }
 
+// ------------------------------------------------------------------------
+
+function stripRegex($str, $regex, $repl = ''): string
+{
+    return trim(preg_replace($regex, $repl, $str));
+}
+
+// ------------------------------------------------------------------------
+
+function stripNonAlphaNumeric($str, $repl = ''): string
+{
+    return stripRegex($str, '/[^A-Za-z0-9]/', $repl);
+}
+
+// ------------------------------------------------------------------------
+
+function stripNonAlphabetic($str, $repl = ''): string
+{
+    return stripRegex($str, '/[^A-Za-z]/', $repl);
+}
+
+// ------------------------------------------------------------------------
+
+function isEven(int $int):bool
+{
+    return $int % 2 === 0;
+}
