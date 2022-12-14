@@ -38,6 +38,16 @@ if ( ! function_exists('output')) {
 
 // ------------------------------------------------------------------------
 
+if ( ! function_exists('dashline')) {
+
+    function dashline(int $len = 40)
+    {
+        output(str_repeat('-', $len));
+    }
+}
+
+// ------------------------------------------------------------------------
+
 if ( ! function_exists('currentDir')) {
 
     function currentDir($filename)
@@ -90,7 +100,7 @@ function stripNonAlphabetic($str, $repl = ''): string
 
 // ------------------------------------------------------------------------
 
-function isEven(int $int):bool
+function isEven(int $int): bool
 {
     return $int % 2 === 0;
 }
