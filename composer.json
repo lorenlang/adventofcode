@@ -11,6 +11,7 @@
   ],
   "require": {
     "drupol/phpermutations": "^1.4",
-    "mistralys/subsetsum": "^1.0"
+    "mistralys/subsetsum": "^1.0",
+    "ext-json": "*"
   }
 }
