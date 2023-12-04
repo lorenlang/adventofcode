@@ -39,7 +39,7 @@ class CircularLinkedList implements Countable
     }
 
 
-    public function count()
+    public function count(): int
     {
         return $this->numNodes;
     }

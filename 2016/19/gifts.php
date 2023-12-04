@@ -17,7 +17,7 @@ while ($elves->count() > 1) {
     $current->data['gifts'] += $current->next->data['gifts'];
     $elves->deleteNode($current->next->data);
     $current = $current->next;
-    output('Remaining: ' . $elves->count());
+//    output('Remaining: ' . $elves->count());
 }
 
 var_export($current->data);
