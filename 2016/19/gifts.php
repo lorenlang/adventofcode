@@ -3,53 +3,38 @@
 require_once '../../autoload.php';
 require_once '../../functions.php';
 
-require_once 'CircularLinkedList.php';
-
-
 //$numElves = 5;
 $numElves = 3017957;
 
-$elves = new ElfList($numElves);
 
-$current = $elves->find(1);
+$elves = range(1, $numElves);
+$current = 0;
 
-while ($elves->count() > 1) {
-    $current->data['gifts'] += $current->next->data['gifts'];
-    $elves->deleteNode($current->next->data);
-    $current = $current->next;
-//    output('Remaining: ' . $elves->count());
+while (count($elves) > 1) {
+
+//    output('Elf ' . $current . ' is stealing');
+    $next = getNext($elves, $current, $numElves);
+//    output('Elf ' . $current . ' steals from ' . $next);
+//    output('Elf ' . $next . ' is removed');
+    unset($elves[$next]);
+//    output('Remaining: ' . count($elves));
+//    output('-------------------');
+    $current = getNext($elves, $next, $numElves);
+
 }
 
-var_export($current->data);
-
-/*
+output('Elf ' . $elves[$current] . ' is the winner');
 
 
-cll = CircularLinkedList()
+function getNext($elves, $current, $max)
+{
+    do {
+        $current++;
+        if ($current >= $max) {
+            $current = 0;
+        }
+    } while (!isset($elves[$current]));
 
-last = cll.addToEmpty(6)
-last = cll.addEnd(8)
-last = cll.addFront(2)
-last = cll.addAfter(10, 2)
-
-cll.traverse()
-
-last = cll.deleteNode(last, 8)
-print()
-cll.traverse()
-
-
-
-$cll = new CircularLinkedList();
-
-$last = $cll->addToEmpty(6);
-$last = $cll->addEnd(8);
-$last = $cll->addFront(2);
-$last = $cll->addAfter(10, 2);
-
-$cll->traverse();
-
-$last = $cll->deleteNode(10);
-echo PHP_EOL;
-$cll->traverse();
- */
+//    output('Elf ' . $current . ' is next');
+    return $current;
+}
