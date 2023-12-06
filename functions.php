@@ -8,10 +8,14 @@
 
 if ( ! function_exists('l')) {
 
-    function l($stuff)
+    function l($stuff, $suppress = FALSE)
     {
         $dev_log = '/var/log/dev.log';
-        $stuff   = timestamp() . ":\n" . var_export($stuff, TRUE) . "\n" . str_repeat('-', 30) . "\n";
+        if ($suppress) {
+            $stuff   = var_export($stuff, TRUE) . "\n";
+        } else {
+            $stuff   = timestamp() . ":\n" . var_export($stuff, TRUE) . "\n" . str_repeat('-', 30) . "\n";
+        }
         error_log($stuff, 3, $dev_log);
     }
 }
