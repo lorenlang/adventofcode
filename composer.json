@@ -12,6 +12,7 @@
   "require": {
     "drupol/phpermutations": "^1.4",
     "mistralys/subsetsum": "^1.0",
-    "ext-json": "*"
+    "ext-json": "*",
+    "phplucidframe/console-table": "^1.2"
   }
 }
