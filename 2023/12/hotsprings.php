@@ -19,8 +19,11 @@ foreach ($data->rows() as $index => $dataRow) {
     $groups = implode(',', [$groups, $groups, $groups, $groups, $groups,]);
     $groups = explode(',', $groups);
 
+    $maxGroup = str_repeat('#', max($groups));
+    $overGroup = str_repeat('#', max($groups) + 1);
+
     $regex    = getRegex($groups);
-    writePatterns($dataRow, $FH);
+    writePatterns($dataRow, $maxGroup, $overGroup, $FH);
     fclose($FH);
 
     $subTotal = 0;
@@ -46,8 +49,11 @@ output ("   Peak memory: ".round(memory_get_peak_usage() / (2 ** 20), 4) . " MiB
 
 /**
  * @param string $row
+ * @param string $maxGroup
+ * @param string $overGroup
+ * @param resource $FH
  */
-function writePatterns(string $row, &$FH): void
+function writePatterns(string $row, string $maxGroup, string $overGroup, &$FH): void
 {
     $pos    = strpos($row, '?');
     if ($pos !== FALSE) {
@@ -55,10 +61,12 @@ function writePatterns(string $row, &$FH): void
         $row2       = $row;
         $row1[$pos] = '.';
         $row2[$pos] = '#';
-        writePatterns($row1, $FH);
-        writePatterns($row2, $FH);
+        writePatterns($row1, $maxGroup, $overGroup, $FH);
+        writePatterns($row2, $maxGroup, $overGroup, $FH);
     } else {
-        fwrite($FH, $row . PHP_EOL);
+        if (str_contains($row, $maxGroup) && !str_contains($row, $overGroup)) {
+            fwrite($FH, $row . PHP_EOL);
+        }
     }
 }
 
