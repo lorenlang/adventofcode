@@ -6,15 +6,15 @@
  * Time: 3:30 PM
  */
 
-if ( ! function_exists('l')) {
+if (!function_exists('l')) {
 
     function l($stuff, $suppress = FALSE)
     {
         $dev_log = '/var/log/dev.log';
         if ($suppress) {
-            $stuff   = var_export($stuff, TRUE) . "\n";
+            $stuff = var_export($stuff, TRUE) . "\n";
         } else {
-            $stuff   = timestamp() . ":\n" . var_export($stuff, TRUE) . "\n" . str_repeat('-', 30) . "\n";
+            $stuff = timestamp() . ":\n" . var_export($stuff, TRUE) . "\n" . str_repeat('-', 30) . "\n";
         }
         error_log($stuff, 3, $dev_log);
     }
@@ -22,7 +22,7 @@ if ( ! function_exists('l')) {
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('timestamp')) {
+if (!function_exists('timestamp')) {
 
     function timestamp()
     {
@@ -32,7 +32,7 @@ if ( ! function_exists('timestamp')) {
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('output')) {
+if (!function_exists('output')) {
 
     function output($str = '')
     {
@@ -42,7 +42,7 @@ if ( ! function_exists('output')) {
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('dashline')) {
+if (!function_exists('dashline')) {
 
     function dashline(int $len = 40)
     {
@@ -52,7 +52,7 @@ if ( ! function_exists('dashline')) {
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('currentDir')) {
+if (!function_exists('currentDir')) {
 
     function currentDir($filename)
     {
@@ -107,4 +107,22 @@ function stripNonAlphabetic($str, $repl = ''): string
 function isEven(int $int): bool
 {
     return $int % 2 === 0;
+}
+
+// ------------------------------------------------------------------------
+
+function isOdd(int $int): bool
+{
+    return $int % 2 !== 0;
+}
+
+// ------------------------------------------------------------------------
+
+function flatten(array $array): array
+{
+    $return = [];
+    array_walk_recursive($array, function ($a) use (&$return) {
+        $return[] = $a;
+    });
+    return $return;
 }

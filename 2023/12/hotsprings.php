@@ -1,0 +1,104 @@
+<?php
+memory_reset_peak_usage();
+$start_time = microtime(TRUE);
+
+use Utility\FileReader;
+
+require_once '../../autoload.php';
+require_once '../../functions.php';
+require_once '../../utility/FileReader.php';
+
+$data = new FileReader(currentDir('test.txt'));
+//$data = new FileReader(currentDir('data.txt'));
+
+$total = 0;
+foreach ($data->rows() as $index => $dataRow) {
+    $FH = fopen('patterns.txt', 'w');
+    [$dataRow, $groups] = explode(' ', $dataRow);
+    $dataRow = implode('?', [$dataRow, $dataRow, $dataRow, $dataRow, $dataRow,]);
+    $groups = implode(',', [$groups, $groups, $groups, $groups, $groups,]);
+    $groups = explode(',', $groups);
+
+    $regex    = getRegex($groups);
+    writePatterns($dataRow, $FH);
+    fclose($FH);
+
+    $subTotal = 0;
+//    $patterns = flatten(getPatterns($dataRow));
+    $patterns = new FileReader(currentDir('patterns.txt'));
+//    foreach ($patterns as $pattern) {
+    foreach ($patterns->rows() as $pattern) {
+        if (preg_match($regex, $pattern)) {
+            $subTotal++;
+            $total++;
+        }
+    }
+
+    output("Subtotal: $subTotal");
+    dashline(15);
+}
+
+output("Total: $total");
+
+output ("Execution time: ".round(microtime(true) - $start_time, 4)." seconds");
+output ("   Peak memory: ".round(memory_get_peak_usage() / (2 ** 20), 4) . " MiB");
+
+
+/**
+ * @param string $row
+ */
+function writePatterns(string $row, &$FH): void
+{
+    $pos    = strpos($row, '?');
+    if ($pos !== FALSE) {
+        $row1       = $row;
+        $row2       = $row;
+        $row1[$pos] = '.';
+        $row2[$pos] = '#';
+        writePatterns($row1, $FH);
+        writePatterns($row2, $FH);
+    } else {
+        fwrite($FH, $row . PHP_EOL);
+    }
+}
+
+
+/**
+ * @param string $row
+ * @return array
+ */
+function getPatterns(string $row): array
+{
+    $return = [];
+    $pos    = strpos($row, '?');
+    if ($pos !== FALSE) {
+        $row1       = $row;
+        $row2       = $row;
+        $row1[$pos] = '.';
+        $row2[$pos] = '#';
+        $return[]   = getPatterns($row1);
+        $return[]   = getPatterns($row2);
+    } else {
+        $return[] = $row;
+    }
+    return $return;
+}
+
+
+/**
+ * @param array $groups
+ * @return string
+ */
+function getRegex(array $groups): string
+{
+    $regex       = '/^\.*';
+    $regexGroups = [];
+    foreach ($groups as $group) {
+        $regexGroups[] = str_repeat('#', $group);
+    }
+    $regex .= implode('\.+', $regexGroups);
+    $regex .= '\.*$/';
+    return $regex;
+}
+
+
