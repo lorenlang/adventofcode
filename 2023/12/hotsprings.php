@@ -13,7 +13,7 @@ $data = new FileReader(currentDir('test.txt'));
 
 $total = 0;
 foreach ($data->rows() as $index => $dataRow) {
-    $FH = fopen('patterns.txt', 'w');
+//    $FH = fopen('patterns.txt', 'w');
     [$dataRow, $groups] = explode(' ', $dataRow);
     $dataRow = implode('?', [$dataRow, $dataRow, $dataRow, $dataRow, $dataRow,]);
     $groups = implode(',', [$groups, $groups, $groups, $groups, $groups,]);
@@ -23,19 +23,22 @@ foreach ($data->rows() as $index => $dataRow) {
     $overGroup = str_repeat('#', max($groups) + 1);
 
     $regex    = getRegex($groups);
-    writePatterns($dataRow, $maxGroup, $overGroup, $FH);
-    fclose($FH);
+    $subTotal = tryPatterns($dataRow, $regex, $maxGroup, $overGroup);
+    $total += $subTotal;
 
-    $subTotal = 0;
+//    writePatterns($dataRow, $maxGroup, $overGroup, $FH);
+//    fclose($FH);
+
+//    $subTotal = 0;
 //    $patterns = flatten(getPatterns($dataRow));
-    $patterns = new FileReader(currentDir('patterns.txt'));
+//    $patterns = new FileReader(currentDir('patterns.txt'));
 //    foreach ($patterns as $pattern) {
-    foreach ($patterns->rows() as $pattern) {
-        if (preg_match($regex, $pattern)) {
-            $subTotal++;
-            $total++;
-        }
-    }
+//    foreach ($patterns->rows() as $pattern) {
+//        if (preg_match($regex, $pattern)) {
+//            $subTotal++;
+//            $total++;
+//        }
+//    }
 
     output("Subtotal: $subTotal");
     dashline(15);
@@ -51,46 +54,75 @@ output ("   Peak memory: ".round(memory_get_peak_usage() / (2 ** 20), 4) . " MiB
  * @param string $row
  * @param string $maxGroup
  * @param string $overGroup
- * @param resource $FH
+ *
+ * @return int
  */
-function writePatterns(string $row, string $maxGroup, string $overGroup, &$FH): void
+function tryPatterns(string $row, string $regex, string $maxGroup, string $overGroup): int
 {
+    $count = 0;
     $pos    = strpos($row, '?');
     if ($pos !== FALSE) {
         $row1       = $row;
         $row2       = $row;
         $row1[$pos] = '.';
         $row2[$pos] = '#';
-        writePatterns($row1, $maxGroup, $overGroup, $FH);
-        writePatterns($row2, $maxGroup, $overGroup, $FH);
+        $count += tryPatterns($row1, $regex, $maxGroup, $overGroup);
+        $count += tryPatterns($row2, $regex, $maxGroup, $overGroup);
     } else {
         if (str_contains($row, $maxGroup) && !str_contains($row, $overGroup)) {
-            fwrite($FH, $row . PHP_EOL);
+            if (preg_match($regex, $row)) {
+                $count++;
+            }
         }
     }
+    return $count;
 }
+
+
+/**
+ * @param string $row
+ * @param string $maxGroup
+ * @param string $overGroup
+ * @param resource $FH
+ */
+//function writePatterns(string $row, string $maxGroup, string $overGroup, &$FH): void
+//{
+//    $pos    = strpos($row, '?');
+//    if ($pos !== FALSE) {
+//        $row1       = $row;
+//        $row2       = $row;
+//        $row1[$pos] = '.';
+//        $row2[$pos] = '#';
+//        writePatterns($row1, $maxGroup, $overGroup, $FH);
+//        writePatterns($row2, $maxGroup, $overGroup, $FH);
+//    } else {
+//        if (str_contains($row, $maxGroup) && !str_contains($row, $overGroup)) {
+//            fwrite($FH, $row . PHP_EOL);
+//        }
+//    }
+//}
 
 
 /**
  * @param string $row
  * @return array
  */
-function getPatterns(string $row): array
-{
-    $return = [];
-    $pos    = strpos($row, '?');
-    if ($pos !== FALSE) {
-        $row1       = $row;
-        $row2       = $row;
-        $row1[$pos] = '.';
-        $row2[$pos] = '#';
-        $return[]   = getPatterns($row1);
-        $return[]   = getPatterns($row2);
-    } else {
-        $return[] = $row;
-    }
-    return $return;
-}
+//function getPatterns(string $row): array
+//{
+//    $return = [];
+//    $pos    = strpos($row, '?');
+//    if ($pos !== FALSE) {
+//        $row1       = $row;
+//        $row2       = $row;
+//        $row1[$pos] = '.';
+//        $row2[$pos] = '#';
+//        $return[]   = getPatterns($row1);
+//        $return[]   = getPatterns($row2);
+//    } else {
+//        $return[] = $row;
+//    }
+//    return $return;
+//}
 
 
 /**
