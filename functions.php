@@ -34,9 +34,14 @@ if (!function_exists('timestamp')) {
 
 if (!function_exists('output')) {
 
-    function output($str = '')
+    function output(string $str = '', string|null $filename = ''): void
     {
-        echo $str . PHP_EOL;
+        if ($filename) {
+        $filename = getcwd() . '/' . $filename;
+            file_put_contents($filename, $str . PHP_EOL, FILE_APPEND);
+        } else {
+            echo $str . PHP_EOL;
+        }
     }
 }
 
@@ -44,9 +49,9 @@ if (!function_exists('output')) {
 
 if (!function_exists('dashline')) {
 
-    function dashline(int $len = 40)
+    function dashline(int $len = 40, string|null $filename = ''): void
     {
-        output(str_repeat('-', $len));
+        output(str_repeat('-', $len), $filename);
     }
 }
 
@@ -118,7 +123,7 @@ function isOdd(int $int): bool
 
 // ------------------------------------------------------------------------
 
-function flatten(array $array): array
+function array_flatten(array $array): array
 {
     $return = [];
     array_walk_recursive($array, function ($a) use (&$return) {
@@ -126,3 +131,8 @@ function flatten(array $array): array
     });
     return $return;
 }
+
+// ------------------------------------------------------------------------
+
+
+

@@ -11,7 +11,14 @@ require_once '../../utility/FileReader.php';
 $data = new FileReader(currentDir('test.txt'));
 //$data = new FileReader(currentDir('data.txt'));
 
+$outputFile = 'output.txt';
+if ($outputFile &&  file_exists($outputFile)) {
+    unlink($outputFile);
+}
+
 $total = 0;
+dashline(15, $outputFile);
+
 foreach ($data->rows() as $index => $dataRow) {
 //    $FH = fopen('patterns.txt', 'w');
     [$dataRow, $groups] = explode(' ', $dataRow);
@@ -40,8 +47,8 @@ foreach ($data->rows() as $index => $dataRow) {
 //        }
 //    }
 
-    output("Subtotal: $subTotal");
-    dashline(15);
+    output("Subtotal: $subTotal", $outputFile);
+    dashline(15, $outputFile);
 }
 
 output("Total: $total");
