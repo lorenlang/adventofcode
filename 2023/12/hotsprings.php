@@ -11,8 +11,9 @@ require_once '../../utility/FileReader.php';
 $data = new FileReader(currentDir('test.txt'));
 //$data = new FileReader(currentDir('data.txt'));
 
-$outputFile = 'output.txt';
-if ($outputFile &&  file_exists($outputFile)) {
+//$outputFile = 'output.txt';
+$outputFile = NULL;
+if ($outputFile && file_exists($outputFile)) {
     unlink($outputFile);
 }
 
@@ -23,15 +24,15 @@ foreach ($data->rows() as $index => $dataRow) {
 //    $FH = fopen('patterns.txt', 'w');
     [$dataRow, $groups] = explode(' ', $dataRow);
     $dataRow = implode('?', [$dataRow, $dataRow, $dataRow, $dataRow, $dataRow,]);
-    $groups = implode(',', [$groups, $groups, $groups, $groups, $groups,]);
-    $groups = explode(',', $groups);
+    $groups  = implode(',', [$groups, $groups, $groups, $groups, $groups,]);
+    $groups  = explode(',', $groups);
 
-    $maxGroup = str_repeat('#', max($groups));
+    $maxGroup  = str_repeat('#', max($groups));
     $overGroup = str_repeat('#', max($groups) + 1);
 
     $regex    = getRegex($groups);
     $subTotal = tryPatterns($dataRow, $regex, $maxGroup, $overGroup);
-    $total += $subTotal;
+    $total    += $subTotal;
 
 //    writePatterns($dataRow, $maxGroup, $overGroup, $FH);
 //    fclose($FH);
@@ -48,13 +49,14 @@ foreach ($data->rows() as $index => $dataRow) {
 //    }
 
     output("Subtotal: $subTotal", $outputFile);
+    output("Execution time: " . round(microtime(TRUE) - $start_time, 4) . " seconds");
     dashline(15, $outputFile);
 }
 
 output("Total: $total");
 
-output ("Execution time: ".round(microtime(true) - $start_time, 4)." seconds");
-output ("   Peak memory: ".round(memory_get_peak_usage() / (2 ** 20), 4) . " MiB");
+output("Execution time: " . round(microtime(TRUE) - $start_time, 4) . " seconds");
+output("   Peak memory: " . round(memory_get_peak_usage() / (2 ** 20), 4) . " MiB");
 
 
 /**
@@ -66,8 +68,12 @@ output ("   Peak memory: ".round(memory_get_peak_usage() / (2 ** 20), 4) . " MiB
  */
 function tryPatterns(string $row, string $regex, string $maxGroup, string $overGroup): int
 {
+    if (str_contains($row, $overGroup)) {
+        return 0;
+    }
+
     $count = 0;
-    $pos    = strpos($row, '?');
+    $pos   = strpos($row, '?');
     if ($pos !== FALSE) {
         $row1       = $row;
         $row2       = $row;
