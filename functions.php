@@ -134,5 +134,18 @@ function array_flatten(array $array): array
 
 // ------------------------------------------------------------------------
 
+function drawGrid($grid): void
+{
+    for ($i = 0, $iMax = count($grid); $i < $iMax; $i++) {
+        for ($j = 0, $jMax = count($grid[$i]); $j < $jMax; $j++) {
+            echo $grid[$i][$j]['curr'] ? '#' : '.';
+        }
+        echo PHP_EOL;
+    }
+    echo PHP_EOL;
+    echo PHP_EOL;
+}
+
+// ------------------------------------------------------------------------
 
 
