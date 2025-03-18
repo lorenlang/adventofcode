@@ -19,7 +19,7 @@ class FileReader
         while ( ! feof($this->file)) {
             $row = trim($parseCSV ? fgetcsv($this->file) : fgets($this->file));
 
-            if ( ! empty($row) || $allowBlank) {
+            if ( ! empty($row) || $row === '0' || $allowBlank) {
                 yield $row;
             }
         }
